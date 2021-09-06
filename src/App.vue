@@ -33,12 +33,14 @@ export default {
   methods: {
     // axios请求接口获取数据
     getInitialUsers() {     
-        axios.get(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`).then(response => {
+        axios.get(`http://localhost/Amitproject/product.php#/`).then(response => {
           // console.log('data',response.data)
           // 將1~6個產品push到threeList上
-          response.data.slice(0,6).forEach(item=>{
+          this.productList = response.data
+          this.productList.splice(0,6).forEach(item=>{
             this.threeList.push(item)
           })
+
         
         })
       
@@ -52,20 +54,17 @@ export default {
         console.log('bottomOfWindow',height - window.innerHeight)
         if (bottomOfWindow && isLoading == false) {
           isLoading = true
-          axios.get(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`).then(response => {
-            // 接續第7個產品開始，全部push到productList陣列內
+
             // 理想是每滑動一次，就把res.data的接續三個產品丟進去productList，這樣throwarray的slice就可以陸續提取productList的末三項(最新三項)
-            for(var i = 6 ; i<response.data.length ; i+3){
-              const mySet = new Set();
-              response.data.slice(i,i+3).forEach(item=>{
-                this.threeList.push(item)
-              })
-              break
-            }
+            this.productList.splice(0,3).forEach(item=>{
+            this.threeList.push(item)
+          })
+
+            console.log('this.productList',this.productList.length)
           
             isLoading = false
             // this.throwArray()
-          })
+          
         } 
       }
     },
