@@ -39,7 +39,7 @@ export default {
   methods: {
     // axios请求接口获取数据
     getInitialUsers() {     
-        axios.get(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`).then(response => {
+        axios.get(`http://localhost/Amitproject/product.php#/`).then(response => {
           // console.log('data',response.data)
           // 將1~6個產品push到threeList上
           this.productList = response.data
@@ -56,10 +56,7 @@ export default {
       let isLoading = false
      
       window.onscroll = () => {
-         this.state = 'visible'
-          setTimeout(() => {
-      this.state = 'hidden'
-    }, 500)
+         
      
         // 距离底部200px时加载一次
         let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight <= 200
@@ -68,10 +65,15 @@ export default {
         if (bottomOfWindow && isLoading == false) {
           isLoading = true
           
-    
+  
+         this.state = 'visible'
             // 理想是每滑動一次，就把res.data的接續三個產品丟進去productList，這樣throwarray的slice就可以陸續提取productList的末三項(最新三項)
             this.productList.splice(0,3).forEach(item=>{
+             
             this.threeList.push(item)
+               setTimeout(() => {
+      this.state = 'hidden'
+    }, 500)
           })
 
             console.log('this.productList',this.productList.length)
@@ -128,8 +130,7 @@ export default {
 }
 .spin{
   position: absolute;
-  left:30% ;
-  top: 30%;
+
 }
  @keyframes fade {
   0%{
