@@ -1,10 +1,12 @@
 <template>
   <div id="app">
+     
     <h1>Random User</h1>
   <section class="container">
     <div class="row">
       <div class="person col-md-4 my-3" v-for="(product, index) in threeList" :key="index">
         <div class="left">
+          <b-spinner class="m-5 spin" v-bind:style="{ visibility: state }" label="Busy" ></b-spinner>
           <img :src="`${product.image}`" alt="">
         </div>
         <div class="right">
@@ -24,7 +26,11 @@ export default {
   data() {
     return {
       productList: [],
-      threeList: []
+      threeList: [],
+      status: {
+        fileUploading: false
+      },
+      state: 'hidden'
     }
   },
    components: { 
@@ -33,7 +39,7 @@ export default {
   methods: {
     // axios请求接口获取数据
     getInitialUsers() {     
-        axios.get(`http://localhost/Amitproject/product.php#/`).then(response => {
+        axios.get(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`).then(response => {
           // console.log('data',response.data)
           // 將1~6個產品push到threeList上
           this.productList = response.data
@@ -45,42 +51,39 @@ export default {
         })
       
     },
-    scroll(person) {
+    scroll() {
+
       let isLoading = false
+     
       window.onscroll = () => {
+         this.state = 'visible'
+          setTimeout(() => {
+      this.state = 'hidden'
+    }, 500)
+     
         // 距离底部200px时加载一次
         let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight <= 200
         let height = document.documentElement.offsetHeight - document.documentElement.scrollTop
         console.log('bottomOfWindow',height - window.innerHeight)
         if (bottomOfWindow && isLoading == false) {
           isLoading = true
-
+          
+    
             // 理想是每滑動一次，就把res.data的接續三個產品丟進去productList，這樣throwarray的slice就可以陸續提取productList的末三項(最新三項)
             this.productList.splice(0,3).forEach(item=>{
             this.threeList.push(item)
           })
 
             console.log('this.productList',this.productList.length)
-          
+            
+            // this.status.fileUploading = false
             isLoading = false
             // this.throwArray()
           
         } 
+        
       }
-    },
-    // throwArray(){
-    //   // this.productList.slice(-3)為提取productList的末三項產品
-    //   // 利用myset去把重複的品項去掉
-    //   const mySet = new Set();
-    //   this.productList.slice(-3).map(item=>{
-    //     // console.log('item' , item)
-    //     mySet.add(item)
-    //   })
-    //     const ty = this.threeList.filter(item =>{
-    //       return mySet.has(item) == true
-    //     })
-    //     console.log('ty',ty)
-    // }
+    }
   },
   beforeMount() {
     // 在页面挂载前就发起请求
@@ -93,6 +96,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@fortawesome/fontawesome-free/css/fontawesome.css';
 .person {
   background: #ccc;
   border-radius: 2px;
@@ -117,6 +121,15 @@ export default {
   .text-capitalize {
     text-transform: capitalize;
   }
+}
+
+.left{
+  position: relative;
+}
+.spin{
+  position: absolute;
+  left:30% ;
+  top: 30%;
 }
  @keyframes fade {
   0%{

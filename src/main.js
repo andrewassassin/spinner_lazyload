@@ -6,6 +6,8 @@ import App from './App.vue'
 import 'bootstrap/dist/js/bootstrap.min'
 //引用bootstrap css的功能
 import BootstrapVue from 'bootstrap-vue'
+import { SpinnerPlugin } from 'bootstrap-vue'
+Vue.use(SpinnerPlugin)
 import 'bootstrap/dist/css/bootstrap.css'
 Vue.use(BootstrapVue)
 new Vue({
