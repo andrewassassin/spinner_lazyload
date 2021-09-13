@@ -6,7 +6,7 @@
     <div class="row">
       <div class="person col-md-4 my-3" v-for="(product, index) in threeList" :key="index">
         <div class="left">
-          <b-spinner class="m-5" v-bind:style="spin(index)" label="Busy"></b-spinner>
+          <b-spinner class="" v-bind:style="spin(index)" label="Busy"></b-spinner>
           <img :src="`${product.image}`" @load="loaded" alt="">
         </div>
         <div class="right">
@@ -37,24 +37,24 @@ export default {
         } 
     },
     loaded() {
-      console.log('into loaded')
         this.threeList.forEach(item=>{
           item.visibility = 'hidden'
         })
     },
-    getInitialUsers() {     
+    async getInitialUsers() {     
 
-      axios.get(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`)
-        .then(
-            response => {
-              this.productList = response.data
-              // console.log('response.data',response.data)
-              this.productList.splice(0,6).forEach(item=>{
-                item.visibility = 'hidden'
-                this.threeList.push(item)
-              })
-            }      
-         )   
+     const test =  await axios.get(`http://localhost/Amitproject/product.php#/`)
+        // .then(
+        //     response => {
+        //       this.productList = response.data
+              
+        //       this.productList.splice(0,6).forEach(item=>{
+        //         item.visibility = 'hidden'
+        //         this.threeList.push(item)
+        //       })
+        //     }      
+        //  )   
+         console.log('test',test)
     },
     scroll() {
 
@@ -73,7 +73,6 @@ export default {
               item.visibility = 'visible'           
               this.threeList.push(item)
           })
-          console.log('three',this.threeList)
             isLoading = false
           
         } 
