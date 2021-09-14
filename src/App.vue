@@ -41,20 +41,20 @@ export default {
           item.visibility = 'hidden'
         })
     },
-    async getInitialUsers() {     
-
-     const test =  await axios.get(`http://localhost/Amitproject/product.php#/`)
-        // .then(
-        //     response => {
-        //       this.productList = response.data
+     getInitialUsers() {  
+       const count = 0
+        axios.post(`http://localhost/Amitproject/product.php#/`,count)
+        .then(
+            response => {
+              this.productList = response.data
               
-        //       this.productList.splice(0,6).forEach(item=>{
-        //         item.visibility = 'hidden'
-        //         this.threeList.push(item)
-        //       })
-        //     }      
-        //  )   
-         console.log('test',test)
+              this.productList.splice(0,6).forEach(item=>{
+                item.visibility = 'hidden'
+                this.threeList.push(item)
+              })
+            }      
+         )   
+         
     },
     scroll() {
 
