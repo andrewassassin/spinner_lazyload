@@ -1,20 +1,20 @@
 <template>
   <div id="app">
-     
-    <h1> </h1>
-  <section class="container">
-    <div class="row">
-      <div class="person col-md-4 my-3" v-for="(product, index) in threeList" :key="index">
-        <div class="left">
-          <b-spinner class="" v-bind:style="spin(index)" label="Busy"></b-spinner>
-          <img :src="`${product.image}`" @load="loaded" alt="">
-        </div>
-        <div class="right">
-          <p>{{ product.name}}</p>
+
+
+    <section class="container">
+      <div class="row">
+        <div class="person col-md-4 my-3" v-for="(product, index) in threeList" :key="index">
+          <div class="left">
+            <b-spinner class="" v-bind:style="spin(index)" label="Busy"></b-spinner>
+            <img :src="`${product.image}`" @load="loaded" alt="">
+          </div>
+          <div class="right">
+            <p>{{ product.name}}</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
   </div>
 </template>
 
@@ -27,61 +27,87 @@ export default {
     return {
       productList: [],
       threeList: [],
-      index:""
+      index:"",
+      state:'',
+      responsiveOptions: [
+			{
+				breakpoint: '1024px',
+				numVisible: 3,
+				numScroll: 3
+			},
+			{
+				breakpoint: '600px',
+				numVisible: 2,
+				numScroll: 2
+			},
+			{
+				breakpoint: '480px',
+				numVisible: 1,
+				numScroll: 1
+			}
+		]
     }
   },
   methods: {
-     spin(idx){
+    spin(idx){
       return {
         visibility: this.threeList[idx].visibility
         } 
     },
     loaded() {
-        this.threeList.forEach(item=>{
-          item.visibility = 'hidden'
-        })
+      this.threeList.forEach(item=>{
+        // item.visibility = 'hidden'
+      })
     },
-     getInitialUsers() {  
-       const count = 0
-        axios.post(`http://localhost/Amitproject/product.php#/`,count)
+    getInitialUsers() {  
+      const count = 0
+      axios.post(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`,count)
         .then(
             response => {
-              this.productList = response.data
               
+              this.productList = response.data
+              console.log(response.data)
               this.productList.splice(0,6).forEach(item=>{
                 item.visibility = 'hidden'
                 this.threeList.push(item)
               })
             }      
-         )   
+        )   
          
     },
     scroll() {
-
       let isLoading = false
-     
-      window.onscroll = () => {
-        // 距离底部200px时加载一次
+      var count = 0
+      var that = this
+      window.onscroll = async function() {
+
+        // 距離底部200px加載一次
         let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight <= 200
         // let height = document.documentElement.offsetHeight - document.documentElement.scrollTop
         // console.log('bottomOfWindow',height - window.innerHeight)
         if (bottomOfWindow && isLoading == false) {
             isLoading = true
-          
-            // 理想是每滑動一次，就把res.data的接續三個產品丟進去productList，這樣throwarray的slice就可以陸續提取productList的末三項(最新三項)
-            this.productList.splice(0,3).forEach(item=>{
-              item.visibility = 'visible'           
-              this.threeList.push(item)
-          })
+            count += 6
+           await axios.post(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`, count)
+            .then(
+              response => {
+                that.productList = response.data
+                that.productList.splice(0,6).forEach(item=>{
+                  item.visibility = 'visible'
+                  that.threeList.push(item)
+                })        
+                that.threeList.forEach(item=>{
+                  item.visibility = 'hidden'
+                })        
+              }      
+            )        
             isLoading = false
-          
-        } 
-        
+        }         
       }
     }
   },
   beforeMount() {
-    // 在页面挂载前就发起请求
+    // 在頁面開啟前發出請求
     this.getInitialUsers()
 
   },

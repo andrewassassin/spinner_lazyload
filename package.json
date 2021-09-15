@@ -18,6 +18,8 @@
     "bootstrap-vue": "^2.21.2",
     "jquery": "^3.6.0",
     "moment": "^2.27.0",
+    "primeicons": "^4.1.0",
+    "primevue": "^3.7.0",
     "vue": "^2.6.12",
     "vue-simple-spinner": "^1.2.10"
   },
