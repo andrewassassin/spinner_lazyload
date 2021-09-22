@@ -62,7 +62,8 @@ export default {
       let isLoading = false
       var count = 0
       var that = this
-      window.onscroll = async function() {
+      window.onscroll =  function() {
+        console.log(1)
 
         // 距離底部200px加載一次
         let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight <= 200
@@ -71,9 +72,10 @@ export default {
         if (bottomOfWindow && isLoading == false) {
             isLoading = true
             count += 6
-           await axios.post(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`, count)
+            axios.post(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`, count)
             .then(
               response => {
+                console.log(2)
                 that.productList = response.data
                 that.productList.splice(0,6).forEach(item=>{
                   item.visibility = 'visible'
@@ -84,6 +86,7 @@ export default {
                 })        
               }      
             )        
+            console.log(3)
             isLoading = false
         }         
       }
