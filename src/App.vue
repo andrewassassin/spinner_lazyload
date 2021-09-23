@@ -7,7 +7,7 @@
         <div class="person col-md-4 my-3" v-for="(product, index) in threeList" :key="index">
           <div class="left">
             <b-spinner class="" v-bind:style="spin(index)" label="Busy"></b-spinner>
-            <img :src="`${product.image}`" @load="loaded" alt="">
+            <img :src="`../../static/img/${product.image[0]}`" @load="loaded" alt="">
           </div>
           <div class="right">
             <p>{{ product.name}}</p>
@@ -51,6 +51,7 @@ export default {
               this.productList = response.data
               console.log(response.data)
               this.productList.splice(0,6).forEach(item=>{
+                item.image = JSON.parse(item.image);
                 item.visibility = 'hidden'
                 this.threeList.push(item)
               })
@@ -62,7 +63,7 @@ export default {
       let isLoading = false
       var count = 0
       var that = this
-      window.onscroll =  function() {
+      window.onscroll = async function() {
         console.log(1)
 
         // 距離底部200px加載一次
@@ -72,20 +73,21 @@ export default {
         if (bottomOfWindow && isLoading == false) {
             isLoading = true
             count += 6
-            axios.post(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`, count)
-            .then(
-              response => {
-                console.log(2)
-                that.productList = response.data
-                that.productList.splice(0,6).forEach(item=>{
-                  item.visibility = 'visible'
-                  that.threeList.push(item)
-                })        
-                that.threeList.forEach(item=>{
-                  item.visibility = 'hidden'
-                })        
-              }      
-            )        
+           await axios.post(`https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc`, count)
+              .then(
+                response => {
+                  console.log(2)
+                  that.productList = response.data
+                  that.productList.splice(0,6).forEach(item=>{
+                    item.image = JSON.parse(item.image);
+                    item.visibility = 'visible'
+                    that.threeList.push(item)
+                  })        
+                  that.threeList.forEach(item=>{
+                    item.visibility = 'hidden'
+                  })        
+                }      
+              )        
             console.log(3)
             isLoading = false
         }         
