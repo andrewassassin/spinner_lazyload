@@ -34,7 +34,7 @@ export default {
   methods: {
     spin(idx){
       return {
-        visibility: this.threeList[idx].visibility
+        // visibility: this.threeList[idx].visibility
         } 
     },
     loaded() {
@@ -52,7 +52,7 @@ export default {
               console.log(response.data)
               this.productList.splice(0,6).forEach(item=>{
                 item.image = JSON.parse(item.image);
-                item.visibility = 'hidden'
+                // item.visibility = 'hidden'
                 this.threeList.push(item)
               })
             }      
@@ -80,11 +80,11 @@ export default {
                   that.productList = response.data
                   that.productList.splice(0,6).forEach(item=>{
                     item.image = JSON.parse(item.image);
-                    item.visibility = 'visible'
+                    // item.visibility = 'visible'
                     that.threeList.push(item)
                   })        
                   that.threeList.forEach(item=>{
-                    item.visibility = 'hidden'
+                    // item.visibility = 'hidden'
                   })        
                 }      
               )        
@@ -101,9 +101,6 @@ export default {
   },
   mounted() {
     this.scroll()
-  },
-  computed:{
-   
   }
 }
 </script>
